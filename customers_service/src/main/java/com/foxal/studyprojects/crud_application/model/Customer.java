@@ -6,18 +6,20 @@ import javax.persistence.*;
 @Table(name = "customers")
 public class Customer {
 
-    @Id
-    @Column(name = "ID")
-    @GeneratedValue
+    public Customer(){
+
+    }
+    public Customer(String name, long inn) {
+        this.name = name;
+        this.inn = inn;
+    }
+
     private int id;
-
-    @Column(name = "NAME")
     private String name;
-
-    @Column(name = "INN")
     private long inn;
 
-
+    @Id
+    @GeneratedValue
     public int getId() {
         return id;
     }
@@ -26,6 +28,7 @@ public class Customer {
         this.id = id;
     }
 
+    @Column(name = "NAME")
     public String getName() {
         return name;
     }
@@ -34,6 +37,7 @@ public class Customer {
         this.name = name;
     }
 
+    @Column(name = "INN", nullable = false, unique = true)
     public long getInn() {
         return inn;
     }

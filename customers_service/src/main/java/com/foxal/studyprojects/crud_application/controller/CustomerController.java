@@ -5,32 +5,31 @@ import com.foxal.studyprojects.crud_application.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
 
-@Controller
 @RestController
-@RequestMapping(path = "/customers", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CustomerController {
 
     @Autowired
     private CustomerRepository customerRepository;
 
-    @RequestMapping("/add")
-    public ResponseEntity<Customer> addCustomer(@RequestParam String name, @RequestParam Long inn) throws URISyntaxException {
-        Customer customer = new Customer();
-        customer.setName(name);
-        customer.setInn(inn);
-        this.customerRepository.save(customer);
+    @GetMapping("/customers")
+    public List< Customer > getAllEmployees() {
+        return customerRepository.findAll();
+    }
 
-        return ResponseEntity.ok(customer);
+    @PostMapping("/customers")
+    public Customer addCustomer(@RequestBody Customer customer){
+        return customerRepository.save(customer);
     }
 
 
-    @RequestMapping("/delete/{id}")
-    public ResponseEntity<Customer> deleteCustomer(@PathVariable("id") int id) {
+    @DeleteMapping("/customers/{id}")
+    public ResponseEntity<Customer> deleteCustomer(@PathVariable("id") int id){
         if(this.customerRepository.existsById(id)) {
             this.customerRepository.deleteById(id);
             return ResponseEntity.ok().build();
@@ -38,8 +37,23 @@ public class CustomerController {
         return ResponseEntity.notFound().build();
     }
 
-    @RequestMapping(path = "/data/{id}")
-    public ResponseEntity<Customer> customerData(@PathVariable("id") int id) {
-        return ResponseEntity.of(customerRepository.findById(id));
+    @PutMapping("/customers/{id}")
+    public ResponseEntity <Customer> updateCustomer(@PathVariable(value = "id") int id, @RequestBody Customer customerDetails){
+        if(customerRepository.existsById(id)){
+            Optional<Customer> customer = customerRepository.findById(id);
+            customer.get().setName(customerDetails.getName());
+            customer.get().setInn(customerDetails.getInn());
+
+            final Customer updateCustomer = customerRepository.save(customer.get());
+            return ResponseEntity.ok(updateCustomer);
+        }
+
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/customers/{id}")
+    public ResponseEntity<Customer> customerData(@PathVariable("id") int id){
+        Optional<Customer> customer = customerRepository.findById(id);
+        return ResponseEntity.ok().body(customer.get());
     }
 }
