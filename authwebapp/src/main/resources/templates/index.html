@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>My notes</title>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css"/>
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container text-center">
+    <form th:action="@{logout}" method="post">
+        <div sec:authorize="isAuthenticated()">
+            <input type="submit" value="Sign Out" th:align="right"/>
+        </div>
+    </form>
+
+    <h1>Welcome to MyNotes</h1>
+
+    <h3><div sec:authorize="isAuthenticated()"><a th:href="@{users}" >List of Users</a></div></h3>
+    <h3><div sec:authorize="isAuthenticated()"><a th:href="@{notes}">Notes</a></div></h3>
+    <h3><div sec:authorize="!isAuthenticated()"><a th:href="@{register}">Register</a></div></h3>
+    <h3><div sec:authorize="!isAuthenticated()"><a th:href="@{login}">Login</a></div></h3>
+</div>
+
+</body>
+</html>
