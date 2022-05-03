@@ -1,19 +1,38 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="ISO-8859-1">
     <title>List Users</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}"/>
     <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
     <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div class="container text-center">
-    <div>
-        <h1>List of Users</h1>
-    </div>
-
-    <div>
+<div class="container">
+    <header>
+        <div class="d-flex justify-content-around">
+            <a th:href="@{/}"><img th:src="@{/img/notes2.png}" alt="My Notes logo" height="80px" width="240px"></a>
+            <div sec:authorize="isAuthenticated()" class="pt-4">
+                <a th:href="@{logout}" class="h4 ">Sign Out</a>
+            </div>
+            <div sec:authorize="!isAuthenticated()" class="pt-4">
+                <a th:href="@{register}" class="h4 mr-2">Register</a>
+                <a th:href="@{login}" class="h4 ml-2">Login</a>
+            </div>
+        </div>
+    </header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav mx-auto">
+                <a class="nav-item nav-link" th:href="@{/}">Home</a>
+                <a class="nav-item nav-link" href="/about_us">About us</a>
+                <a sec:authorize="isAuthenticated()" class="nav-item nav-link" th:href="@{notes}">Notes</a>
+                <a sec:authorize="hasAuthority('ADMIN')" class="nav-item nav-link" th:href="@{users}">Users</a>
+            </div>
+        </div>
+    </nav>
+    <div class="pt-4">
         <table class="table table-striped table-bordered">
             <thead class="thead-dark">
             <tr>

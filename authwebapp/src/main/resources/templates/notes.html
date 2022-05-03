@@ -1,24 +1,45 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="ISO-8859-1">
     <title>Notes</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}"/>
     <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css"/>
     <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div th:marginheight="10" th:marginwidth="10">
-    <div>
-        <h4><a th:href="@{add_new_note}">Add new note</a></h4>
-    </div>
-    <div>
-        <div th:each="note: ${notesList}">
-            <div>
-                <h2 th:text="${note.title}"></h2>
+<div class="container">
+    <header>
+        <div class="d-flex justify-content-around">
+            <a th:href="@{/}"><img th:src="@{/img/notes2.png}" alt="My Notes logo" height="80px" width="240px"></a>
+            <div class="pt-4">
+                <a th:href="@{logout}" class="h4">Sign Out</a>
             </div>
-            <div>
-                <p th:text="${note.note}">
+        </div>
+    </header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav mx-auto">
+                <a class="nav-item nav-link" th:href="@{/}">Home</a>
+                <a class="nav-item nav-link" href="/about_us">About us</a>
+                <a sec:authorize="isAuthenticated()" class="nav-item nav-link" th:href="@{notes}">Notes</a>
+                <a sec:authorize="hasAuthority('ADMIN')" class="nav-item nav-link" th:href="@{users}">Users</a>
+            </div>
+        </div>
+    </nav>
+    <div class="pt-4">
+        <div class="d-flex justify-content-center">
+            <a th:href="@{add_new_note}" class="h4">Add new note</a>
+        </div>
+        <div>
+            <div th:each="note: ${notesList}">
+                <div>
+                    <h4 th:text="${note.title}"></h4>
+                </div>
+                <div class="pl-2 pb-3 text-break">
+                    <p th:text="${note.note}">
+                </div>
             </div>
         </div>
     </div>
