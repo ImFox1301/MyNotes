@@ -4,13 +4,14 @@ import com.foxal.springsecurityapp.authwebapp.models.Note;
 import com.foxal.springsecurityapp.authwebapp.models.User;
 import com.foxal.springsecurityapp.authwebapp.repositories.NoteRepository;
 import com.foxal.springsecurityapp.authwebapp.repositories.UserRepository;
+import com.foxal.springsecurityapp.authwebapp.services.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class NoteController {
 
     @Autowired
     private UserRepository userRepository;
+
 
     @GetMapping("/notes")
     public String notes(Model model, Authentication authentication) {
@@ -49,5 +51,43 @@ public class NoteController {
 
         return "redirect:/notes";
     }
+
+    @GetMapping("/edit/{id}")
+    public String showNoteUpdateForm(@PathVariable(name = "id") long id, Model model, Authentication authentication) {
+        Note note = noteRepository.findNoteById(id);
+
+        if(!userRepository.findByUsername(authentication.getName()).getId().equals(note.getUserId()))
+            return "redirect:/notes";
+
+        model.addAttribute("note", note);
+
+        return "update_note";
+    }
+
+    @PutMapping("/update/{id}")
+    public String updateNote(@PathVariable(name = "id") long id, String title, String note){
+        Note tmpNote = noteRepository.findNoteById(id);
+
+        tmpNote.setTitle(title);
+        tmpNote.setNote(note);
+
+        noteRepository.save(tmpNote);
+
+        return "redirect:/notes";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteNote(@PathVariable(name = "id") long id, Authentication authentication) {
+
+        Note note = noteRepository.getById(id);
+
+        if(!userRepository.findByUsername(authentication.getName()).getId().equals(note.getUserId()))
+            return "redirect:/notes";
+
+        noteRepository.deleteById(id);
+
+        return "redirect:/notes";
+    }
+
 }
 
