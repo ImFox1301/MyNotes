@@ -1,6 +1,5 @@
 package com.foxal.springsecurityapp.authwebapp.services;
 
-import com.foxal.springsecurityapp.authwebapp.models.Role;
 import com.foxal.springsecurityapp.authwebapp.models.User;
 import com.foxal.springsecurityapp.authwebapp.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

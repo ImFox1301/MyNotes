@@ -1,17 +1,16 @@
 package com.foxal.springsecurityapp.authwebapp.controllers;
 
 import com.foxal.springsecurityapp.authwebapp.models.Note;
-import com.foxal.springsecurityapp.authwebapp.models.User;
 import com.foxal.springsecurityapp.authwebapp.repositories.NoteRepository;
 import com.foxal.springsecurityapp.authwebapp.repositories.UserRepository;
-import com.foxal.springsecurityapp.authwebapp.services.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import java.util.List;
 
